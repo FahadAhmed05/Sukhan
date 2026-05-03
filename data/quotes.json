@@ -1,0 +1,30 @@
+{
+  "meta": { "version": 1 },
+  "quotes": [
+    { "id": 1, "category": "Motivation", "text": "صبر کا پھل میٹھا ہوتا ہے۔" },
+    { "id": 2, "category": "Motivation", "text": "کوشش جاری رکھیں، کامیابی قریب ہے۔" },
+    { "id": 3, "category": "Motivation", "text": "آج کی محنت کل کی آسانی ہے۔" },
+    { "id": 4, "category": "Motivation", "text": "جو آج پڑے گا، کل چمکے گا۔" },
+    { "id": 5, "category": "Motivation", "text": "ناامیدی چھوڑیں، اللہ بڑا مہربان ہے۔" },
+    { "id": 6, "category": "Islamic", "text": "یقین رکھو، اللہ بہترین منصوبہ بناتا ہے۔" },
+    { "id": 7, "category": "Islamic", "text": "تکبیر دل کو سکون دیتی ہے۔" },
+    { "id": 8, "category": "Islamic", "text": "نماز دل کی ٹھنڈک ہے۔" },
+    { "id": 9, "category": "Islamic", "text": "قرآن پڑھنا دل کی روشنی ہے۔" },
+    { "id": 10, "category": "Islamic", "text": "اللہ پر بھروسہ سب سے بڑی طاقت ہے۔" },
+    { "id": 11, "category": "Sad", "text": "کچھ رشتے وقت کی نظر ہو جاتے ہیں۔" },
+    { "id": 12, "category": "Sad", "text": "دکھ بھی گزر جاتے ہیں، بس صبر کریں۔" },
+    { "id": 13, "category": "Sad", "text": "آنکھیں سچ بول جاتی ہیں جب زبان چپ ہو۔" },
+    { "id": 14, "category": "Sad", "text": "کبھی کبھی خاموشی سب سے بڑا جواب ہوتی ہے۔" },
+    { "id": 15, "category": "Sad", "text": "دل ٹوٹ کر بھی دعا مانگتا ہے۔" },
+    { "id": 16, "category": "Love", "text": "محبت میں وفا سب سے خوبصورت ہے۔" },
+    { "id": 17, "category": "Love", "text": "تمہاری مسکراہٹ میری دنیا ہے۔" },
+    { "id": 18, "category": "Love", "text": "سچی محبت بغیر شرط کے ہوتی ہے۔" },
+    { "id": 19, "category": "Love", "text": "دل کی گہرائیوں میں تم بستے ہو۔" },
+    { "id": 20, "category": "Love", "text": "محبت ایک احساس ہے، لفظ نہیں۔" },
+    { "id": 21, "category": "Life", "text": "زندگی ایک سفر ہے، ہر قدم سیکھنا ہے۔" },
+    { "id": 22, "category": "Life", "text": "آج بہتر کل کا سنگ میل ہے۔" },
+    { "id": 23, "category": "Life", "text": "چھوٹی خوشیاں بڑی طاقت دیتی ہیں۔" },
+    { "id": 24, "category": "Life", "text": "وقت سب سے قیمتی سرمایہ ہے۔" },
+    { "id": 25, "category": "Life", "text": "سادہ زندگی، پرسکون دل۔" }
+  ]
+}

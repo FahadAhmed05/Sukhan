@@ -1,98 +1,91 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useMemo } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { AppHeader } from '@/components/layout/AppHeader';
+import { ScreenBody } from '@/components/layout/ScreenBody';
+import { CategoryTile } from '@/components/home/CategoryTile';
+import { QuoteOfDayCard } from '@/components/home/QuoteOfDayCard';
+import { StreakBanner } from '@/components/home/StreakBanner';
+import { CATEGORY_ORDER, CATEGORY_SLUGS } from '@/constants/categories';
+import { FontUi } from '@/constants/fonts';
+import { useAppTheme } from '@/context/app-theme';
+import { useQuotesCatalog } from '@/context/QuotesCatalogContext';
+import { getQuoteOfTheDay } from '@/lib/quote-helpers';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const router = useRouter();
+  const t = useAppTheme();
+  const { quotes, loading, error, source, refresh } = useQuotesCatalog();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  const quoteOfDay = useMemo(() => getQuoteOfTheDay(quotes), [quotes]);
+
+  const counts = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const c of CATEGORY_ORDER) map[c] = 0;
+    for (const q of quotes) {
+      map[q.category] += 1;
+    }
+    return map;
+  }, [quotes]);
+
+  const showLoading = loading && quotes.length === 0;
+
+  return (
+    <View style={[styles.flex, { backgroundColor: t.background }]}>
+      <AppHeader
+        title="Sukhan"
+        subtitle="Urdu quotes · streaks · insights"
+        right={
+          <TouchableOpacity
+            onPress={() => router.push('/search')}
+            hitSlop={10}
+            accessibilityRole="button"
+            accessibilityLabel="Search quotes">
+            <Ionicons name="search" size={24} color={t.headerText} />
+          </TouchableOpacity>
+        }
+      />
+      <ScreenBody refreshing={loading} onRefresh={() => void refresh()}>
+        {error && source === 'bundled' ? (
+          <Text style={[styles.offline, { color: t.textMuted, fontFamily: FontUi.regular }]}>
+            Could not reach Firebase — showing bundled quotes. Pull down to retry.
+          </Text>
+        ) : null}
+        {showLoading ? (
+          <View style={styles.loaderWrap}>
+            <ActivityIndicator size="large" color={t.tint} />
+          </View>
+        ) : null}
+        <StreakBanner />
+        {quoteOfDay ? <QuoteOfDayCard quote={quoteOfDay} /> : null}
+        <Text style={[styles.section, { color: t.text, fontFamily: FontUi.bold }]}>
+          Browse by category
+        </Text>
+        <View style={styles.grid}>
+          {CATEGORY_ORDER.map((cat) => (
+            <CategoryTile
+              key={cat}
+              category={cat}
+              count={counts[cat] ?? 0}
+              onPress={() => router.push(`/category/${CATEGORY_SLUGS[cat]}`)}
+            />
+          ))}
+        </View>
+      </ScreenBody>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  flex: { flex: 1 },
+  offline: { fontSize: 13, marginBottom: 12, lineHeight: 18 },
+  loaderWrap: { paddingVertical: 24, alignItems: 'center' },
+  section: { fontSize: 18, marginBottom: 12 },
+  grid: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
 });
